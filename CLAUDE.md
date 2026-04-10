@@ -299,3 +299,27 @@ pyproj
 - **Spatial joins:** Parcel data likely needs point-in-polygon join to tract boundaries. If parcel data has lat/lon, use geopandas. If not, geocode from address or use the BLOCKLOT-to-tract crosswalk if one exists.
 - **Data type consistency:** Poverty rates, unemployment, etc. in the Urban Institute file are decimals (0.21 = 21%). Maintain this format throughout.
 - **Missing data:** Some Urban Institute fields have blanks (e.g., median_grossrent for tracts with very few renters). Handle gracefully — don't drop rows, flag missingness.
+
+---
+
+## Iteration Logging — Required After Every Session
+
+At the end of every working session, create an iteration summary:
+
+1. Create a folder: `iterations/NN_YYYY-MM-DD_HHMM/` (e.g. `iterations/02_2026-04-15_1045/`)
+   - `NN` = zero-padded iteration number (01, 02, 03 …)
+   - Use the actual local time when the session ends
+2. Create `iterations/NN_.../summary.md` containing:
+   - **Date / Time**
+   - **Session goal** — what was being worked on
+   - **What was built or changed** — scripts added/modified, data pulled, bugs fixed
+   - **Data sources & actual endpoints used** — update if any URLs or field names changed from the docs
+   - **Results / outputs** — row counts, key numbers, output file names
+   - **Key technical findings / gotchas** — anything that differed from the plan or will matter next session
+
+This is mandatory — do not end a session without creating the iteration folder and summary.
+
+### Iteration Log
+| # | Folder | Summary |
+|---|--------|---------|
+| 01 | `iterations/01_2026-04-10_1634/` | Full pipeline built and executed end-to-end: 10 scripts, 237k parcels + 278k permits pulled, 451 MD tracts scored, 113 recommended designations produced |

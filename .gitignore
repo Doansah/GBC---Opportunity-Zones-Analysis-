@@ -1,0 +1,33 @@
+# ── Raw data pulls (large API downloads — regenerate with scripts) ────────────
+data/raw/
+
+# ── Root copy of Urban Institute CSV (5.5 MB, raw source file) ───────────────
+UrbanInstitute_OZDesignationTool_3_9_2026_0.csv
+
+# ── General large file safety net ────────────────────────────────────────────
+*.csv.gz
+*.parquet
+*.feather
+*.pkl
+*.db
+*.sqlite
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── OS / editor ───────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp

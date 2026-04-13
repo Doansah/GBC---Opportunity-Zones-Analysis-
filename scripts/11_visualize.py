@@ -270,6 +270,49 @@ def map_composite_score(
     print(f"  Saved {out_path.name}")
 
 
+# ── Incentive zone layer config ───────────────────────────────────────────────
+# (filename, display name, fill color, border color, tooltip fields, aliases)
+INCENTIVE_ZONE_LAYERS = [
+    (
+        "enterprise_zones.geojson",
+        "Enterprise Zones",
+        "#2c7fb8", "#1d5f8a",
+        ["sitename", "county", "city"],
+        ["Zone Name", "County", "City"],
+    ),
+    (
+        "sustainable_communities.geojson",
+        "Sustainable Communities",
+        "#31a354", "#1f7035",
+        ["Name", "County", "Acreage"],
+        ["Community Name", "County", "Acreage (ac)"],
+    ),
+    (
+        "rise_zones.geojson",
+        "RISE Zones",
+        "#756bb1", "#4a3d8f",
+        ["ZONE_NAME", "COUNTY", "CITY"],
+        ["Zone Name", "County", "City"],
+    ),
+    (
+        "Qualified_Census_Tracts.geojson",
+        "Qualified Census Tracts (QCT/LIHTC)",
+        "#fd8d3c", "#d45e00",
+        ["COUNTY_N", "GEOID20"],
+        ["County", "Tract GEOID"],
+    ),
+    (
+        "MDOT_Designated_TOD_Boundaries.geojson",
+        "Transit Oriented Development (TOD)",
+        "#e31a1c", "#a50f15",
+        ["Station_Na", "County", "Des_Category"],
+        ["Station", "County", "Category"],
+    ),
+]
+
+IMAP_DIR = Path(__file__).resolve().parent.parent / "data" / "raw" / "imap_incentive_zones"
+
+
 # ── Folium interactive HTML ───────────────────────────────────────────────────
 
 def build_folium_map(
@@ -279,7 +322,7 @@ def build_folium_map(
     top20_goldilocks: gpd.GeoDataFrame,
     out_path: Path,
 ) -> None:
-    print("  Building folium map…")
+    print("  Building folium map...")
 
     # Reproject to WGS84 (folium requires EPSG:4326)
     gdf_4326       = gdf.to_crs(epsg=4326)
@@ -320,7 +363,7 @@ def build_folium_map(
         highlight=True,
     ).add_to(m)
 
-    # ── Layer 2: All 451 tracts, colored by classification (hidden by default) ──
+    # ── Layer 2: All 451 tracts, colored by UI classification (hidden) ────────
     color_map = (
         gdf_4326.set_index("geoid")["classification"]
         .map(CLASS_COLORS)
@@ -347,7 +390,55 @@ def build_folium_map(
         show=False,
     ).add_to(m)
 
-    # ── Layer 3: Recommended tracts (bold black outline) with tooltip ─────────
+    # ── Layers 3–7: Individual incentive zone overlays (all hidden by default) ─
+    for fname, layer_name, fill_color, border_color, tt_fields, tt_aliases in INCENTIVE_ZONE_LAYERS:
+        zone_path = IMAP_DIR / fname
+        if not zone_path.exists():
+            print(f"  WARNING: {fname} not found — skipping layer '{layer_name}'")
+            continue
+
+        with open(zone_path, encoding="utf-8") as f:
+            zone_geo = json.load(f)
+
+        feature_count = len(zone_geo.get("features", []))
+        print(f"  Adding layer '{layer_name}' ({feature_count} features)")
+
+        # Only include tooltip fields that actually exist in this file's properties
+        sample_props = {}
+        if zone_geo.get("features"):
+            sample_props = zone_geo["features"][0].get("properties", {})
+        valid_fields   = [f for f in tt_fields  if f in sample_props]
+        valid_aliases  = [tt_aliases[i] for i, f in enumerate(tt_fields) if f in sample_props]
+
+        zone_style = {
+            "fillColor":   fill_color,
+            "color":       border_color,
+            "weight":      1.5,
+            "fillOpacity": 0.25,
+        }
+        zone_highlight = {
+            "fillOpacity": 0.55,
+            "weight":      2.5,
+        }
+
+        layer_kwargs = dict(
+            data=zone_geo,
+            name=layer_name,
+            style_function=lambda _f, s=zone_style: s,
+            highlight_function=lambda _f, h=zone_highlight: h,
+            show=False,
+        )
+        if valid_fields:
+            layer_kwargs["tooltip"] = folium.GeoJsonTooltip(
+                fields=valid_fields,
+                aliases=valid_aliases,
+                localize=True,
+                sticky=False,
+            )
+
+        folium.GeoJson(**layer_kwargs).add_to(m)
+
+    # ── Layer 8: Recommended tracts (bold black outline) with hover tooltip ───
     tooltip_cols = [
         "geoid", "county", "classification", "composite_score", "rank",
         "jobs_2022", "povrate_2024", "stackability_count",
@@ -387,18 +478,14 @@ def build_folium_map(
         ),
     ).add_to(m)
 
-    # ── Layer 4: Top 20 Goldilocks CircleMarkers with popup table ────────────
+    # ── Layer 9: Top 20 Goldilocks CircleMarkers with popup table ─────────────
     top20_layer = folium.FeatureGroup(name="Top 20 Goldilocks tracts")
     for _, row in top20_4326.iterrows():
         centroid = row.geometry.centroid
-        inc_val = (
-            f"${int(row['median_hhincome_2024']):,}"
-            if pd.notna(row.get("median_hhincome_2024"))
-            else "N/A"
-        )
-        pov_pct  = f"{row['povrate_2024'] * 100:.1f}%" if pd.notna(row.get("povrate_2024")) else "N/A"
-        unemp_pct = f"{row['unemprate_2024'] * 100:.1f}%" if pd.notna(row.get("unemprate_2024")) else "N/A"
-        jobs_fmt = f"{int(row['jobs_2022']):,}" if pd.notna(row.get("jobs_2022")) else "N/A"
+        inc_val   = f"${int(row['median_hhincome_2024']):,}" if pd.notna(row.get("median_hhincome_2024")) else "N/A"
+        pov_pct   = f"{row['povrate_2024'] * 100:.1f}%"     if pd.notna(row.get("povrate_2024"))         else "N/A"
+        unemp_pct = f"{row['unemprate_2024'] * 100:.1f}%"   if pd.notna(row.get("unemprate_2024"))       else "N/A"
+        jobs_fmt  = f"{int(row['jobs_2022']):,}"             if pd.notna(row.get("jobs_2022"))            else "N/A"
 
         popup_html = f"""
         <div style="font-family:sans-serif; font-size:12px; width:230px;">
@@ -452,7 +539,7 @@ def build_folium_map(
             Maryland OZ Designation &mdash; 113 Recommended Tracts
         </div>
         <div style="font-size:11px; color:#555; margin-top:3px;">
-            Hover over tracts for details. Green outlines = recommended.
+            Hover over tracts for details. Toggle layers in the panel (top right).
         </div>
     </div>
     """

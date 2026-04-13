@@ -3,3 +3,5 @@ geopandas
 requests
 shapely
 pyproj
+matplotlib
+folium

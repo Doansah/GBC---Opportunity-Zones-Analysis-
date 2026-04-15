@@ -512,7 +512,7 @@ def build_folium_map(
         """
         folium.CircleMarker(
             location=[centroid.y, centroid.x],
-            radius=8,
+            radius=6,
             color="#1a9641",
             fill=True,
             fill_color="#1a9641",

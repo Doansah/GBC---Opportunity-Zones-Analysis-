@@ -31,10 +31,11 @@ from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-ROOT       = Path(__file__).resolve().parent.parent
-SCORED_CSV = ROOT / "data" / "output" / "scored_tracts.csv"
-SHP_PATH   = ROOT / "census_tract_shape_files" / "tl_2025_24_tract.shp"
-OUT_DIR    = ROOT / "data" / "output" / "maps"
+ROOT          = Path(__file__).resolve().parent.parent
+SCORED_CSV    = ROOT / "data" / "output" / "scored_tracts.csv"
+SHP_PATH      = ROOT / "census_tract_shape_files" / "tl_2025_24_tract.shp"
+ELIGIBLE_CSV  = ROOT / "data" / "raw" / "eligible_census_tracts.csv"
+OUT_DIR       = ROOT / "data" / "output" / "maps"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Visual constants ──────────────────────────────────────────────────────────
@@ -363,7 +364,50 @@ def build_folium_map(
         highlight=True,
     ).add_to(m)
 
-    # ── Layer 2: All 451 tracts, colored by UI classification (hidden) ────────
+    # ── Layer 2: Eligible Census Tracts via EIG (hidden by default) ──────────
+    if ELIGIBLE_CSV.exists():
+        eligible_df = pd.read_csv(ELIGIBLE_CSV, dtype={"Census Tract Number": str})
+        eligible_df["geoid"] = eligible_df["Census Tract Number"].str.zfill(11)
+        eligible_df = eligible_df.rename(columns={
+            "Census Tract Number": "tract_number",
+            "Rural Status":        "rural_status",
+        })
+
+        eligible_gdf = gdf_4326.merge(
+            eligible_df[["geoid", "rural_status"]],
+            on="geoid",
+            how="inner",
+        )
+        eligible_geo = json.loads(
+            eligible_gdf[["geoid", "county", "rural_status", "geometry"]].to_json()
+        )
+
+        def style_eligible(_feature):
+            return {
+                "fillColor": "#4292c6",
+                "color":     "#08519c",
+                "weight":    1.0,
+                "fillOpacity": 0.20,
+            }
+
+        folium.GeoJson(
+            data=eligible_geo,
+            name="Eligible Census Tracts via EIG",
+            style_function=style_eligible,
+            highlight_function=lambda _f: {"fillOpacity": 0.45, "weight": 2.0},
+            tooltip=folium.GeoJsonTooltip(
+                fields=["geoid", "county", "rural_status"],
+                aliases=["GEOID", "County", "Rural Status"],
+                localize=True,
+                sticky=False,
+            ),
+            show=False,
+        ).add_to(m)
+        print(f"  Added 'Eligible Census Tracts via EIG' ({len(eligible_gdf)} tracts)")
+    else:
+        print(f"  WARNING: {ELIGIBLE_CSV} not found — skipping eligible tracts layer")
+
+    # ── Layer 3: All 451 tracts, colored by UI classification (hidden) ────────
     color_map = (
         gdf_4326.set_index("geoid")["classification"]
         .map(CLASS_COLORS)

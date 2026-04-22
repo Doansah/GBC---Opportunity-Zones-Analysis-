@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opportunity Zones 2.0 — Maryland Tract Analysis</title>
+  <meta name="description" content="An interactive tool for stakeholders to review and select Maryland census tracts for Opportunity Zone 2.0 designation." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Sticky nav ─────────────────────────────────────────────────────────── -->
+<nav class="site-nav">
+  <a class="brand" href="#">GBC &mdash; Opportunity Zones 2.0</a>
+  <ul>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#map-section">Map</a></li>
+    <li><a href="#submit-section">Submit</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<header class="hero">
+  <p class="hero-eyebrow">Greater Baltimore Committee &mdash; 2026</p>
+  <h1>Opportunity Zones 2.0<br>Maryland Tract Analysis</h1>
+  <p class="hero-sub">
+    Maryland's governor will designate up to 113 census tracts as Opportunity Zones
+    under the new 2027 program. This tool presents our data-driven recommendations
+    and invites stakeholders to share their priorities.
+  </p>
+  <a href="#map-section" class="hero-cta">Explore the Map &amp; Vote</a>
+</header>
+
+<!-- ── Background ─────────────────────────────────────────────────────────── -->
+<section id="background">
+  <div class="container">
+    <p class="section-label">Background</p>
+    <h2>What Are Opportunity Zones?</h2>
+
+    <p class="lead">
+      Opportunity Zones are federally designated census tracts where investors
+      can receive significant capital gains tax benefits in exchange for
+      long-term investment. Created by the 2017 Tax Cuts and Jobs Act, the
+      original program designated nearly 9,000 tracts nationwide through 2026.
+    </p>
+
+    <p>
+      The <strong>2027 re-designation</strong> gives governors a second chance
+      to choose which distressed communities receive this powerful incentive.
+      Maryland can designate up to 25% of its 451 eligible tracts &mdash; roughly
+      113 communities &mdash; as Opportunity Zones. Unlike the 2018 round, this
+      cycle benefits from years of research on what actually made Opportunity Zones
+      work, and what didn't.
+    </p>
+
+    <p>
+      The Greater Baltimore Committee partnered with researchers to apply that
+      evidence to Maryland's specific landscape. Our goal: identify the
+      <em>Goldilocks tracts</em> &mdash; communities that genuinely need investment
+      and have enough economic infrastructure to actually attract private capital.
+      Not too distressed that investors stay away. Not already-thriving areas
+      where the tax break is redundant. Just right.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-number">451</div>
+        <div class="stat-label">Eligible Maryland tracts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">113</div>
+        <div class="stat-label">Designations available (~25%)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">66</div>
+        <div class="stat-label">Goldilocks tracts identified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">28</div>
+        <div class="stat-label">In Baltimore City alone</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Methodology ─────────────────────────────────────────────────────────── -->
+<section id="methodology">
+  <div class="container">
+    <p class="section-label">Our Approach</p>
+    <h2>How We Evaluated Tracts</h2>
+
+    <div class="methodology-grid">
+      <!-- Left: three-stage process -->
+      <div>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">
+          We evaluated Maryland's 451 eligible tracts through a three-stage
+          process grounded in research from the first OZ round, particularly
+          Ohio's analysis of what separated successful designations from
+          underperforming ones.
+        </p>
+
+        <ul class="stage-list">
+          <li>
+            <div>
+              <strong>Hard Filters</strong>
+              <span>
+                Eliminate clearly unviable tracts (fewer than 200 jobs AND
+                poverty above 45% AND zero building permits &mdash; designation
+                would go unused) and already-thriving tracts where income
+                exceeds the metro median and home values are in the top quartile
+                (capital flows regardless of OZ status).
+              </span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Weighted Scoring</strong>
+              <span>
+                Surviving tracts receive a composite score across three
+                dimensions: Investment Viability, Community Need, and Incentive
+                Stackability. The scoring weights reflect what Ohio research
+                found to be the strongest predictors of OZ investment activity.
+              </span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Recommendation</strong>
+              <span>
+                The top-ranked tracts &mdash; up to 113 &mdash; are marked as
+                recommended designations. Individual tract profiles will be
+                developed for the top 20–30 candidates to inform final decisions.
+              </span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="goldilocks-box">
+          <strong>The Goldilocks Zone</strong>
+          Research from the first OZ round shows the strongest results come from
+          tracts with <em>moderate distress</em> (20–35% poverty rate) combined
+          with an existing economic base (job density, commercial activity,
+          permit activity). Extreme distress with no economic infrastructure
+          repels private capital; low distress with high home values means the
+          incentive isn't needed. We're looking for the middle ground.
+        </div>
+      </div>
+
+      <!-- Right: scoring table -->
+      <div>
+        <h3 style="margin-bottom:0.75rem;">Scoring Weight Breakdown</h3>
+        <table class="score-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th class="pct">Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="category-row">
+              <td>Investment Viability</td>
+              <td class="pct">52%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Job density (strongest predictor)</td>
+              <td>30%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Development capacity (vacancy, land use)</td>
+              <td>12%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Market momentum (permits, sale prices)</td>
+              <td>10%</td>
+            </tr>
+            <tr class="category-row">
+              <td>Community Need</td>
+              <td class="pct">33%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Poverty rate</td>
+              <td>15%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Median household income</td>
+              <td>10%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Unemployment rate</td>
+              <td>8%</td>
+            </tr>
+            <tr class="category-row">
+              <td>Incentive Stackability</td>
+              <td class="pct">15%</td>
+            </tr>
+            <tr class="sub-row">
+              <td>Overlap with Enterprise Zones, Sustainable Communities, RISE Zones</td>
+              <td>15%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.6rem;">
+          The #1 predictor from Ohio research: job density. Goldilocks tracts had
+          58% more jobs than non-Goldilocks tracts with similar poverty levels.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Interactive Map ─────────────────────────────────────────────────────── -->
+<section id="map-section">
+  <!-- Controls bar -->
+  <div class="map-controls">
+    <h2>Interactive Tract Map</h2>
+    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+      <span style="font-size:0.8rem;color:var(--text-muted);">Color by:</span>
+      <div class="view-toggle">
+        <button id="btn-score" class="active">Composite Score</button>
+        <button id="btn-class">Classification</button>
+      </div>
+      <span style="font-size:0.78rem;color:var(--text-muted);">
+        Click a tract to select it &bull; Hover to inspect
+      </span>
+    </div>
+  </div>
+
+  <!-- Map + sidebar -->
+  <div class="map-wrapper">
+    <div id="map"></div>
+
+    <div id="sidebar">
+      <div class="sidebar-header">
+        <div style="display:flex;align-items:center;flex:1;min-width:0;">
+          <span class="sidebar-title">Selected Tracts</span>
+          <span class="selection-badge" id="selection-count">0</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle" title="Collapse panel">&#8249;</button>
+      </div>
+      <div class="sidebar-body">
+        <div class="sidebar-empty" id="sidebar-empty">
+          Click tracts on the map to add them to your selection.
+        </div>
+        <div id="tract-list"></div>
+      </div>
+      <div class="sidebar-footer">
+        Selections are saved in your browser and persist on refresh.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Floating tooltip (positioned by JS) -->
+<div id="map-tooltip"></div>
+
+<!-- ── Submit ─────────────────────────────────────────────────────────────── -->
+<section id="submit-section">
+  <div class="container">
+    <p class="section-label">Stakeholder Input</p>
+    <h2>Submit Your Selections</h2>
+
+    <div class="submit-layout">
+      <!-- Left: description -->
+      <div class="submit-description">
+        <p>
+          Your selections represent the tracts you believe Maryland should
+          prioritize for Opportunity Zone 2.0 designation. There is no limit
+          to how many you can choose &mdash; select as many or as few as reflect
+          your priorities.
+        </p>
+        <p>
+          Submissions are collected by the Greater Baltimore Committee and will
+          inform recommendations to state government. All inputs are reviewed
+          alongside the quantitative scoring.
+        </p>
+
+        <div class="selection-summary">
+          <strong>Your current selection</strong>
+          <div><span id="submit-count" style="font-size:1.5rem;font-weight:800;color:var(--navy);">0</span>
+          <span style="font-size:0.88rem;color:var(--text-muted);"> tracts selected</span></div>
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.25rem;">
+            Use the map above to add or remove tracts.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div>
+        <div class="form-group">
+          <label for="field-name">Your Name <span style="color:#dc2626">*</span></label>
+          <input type="text" id="field-name" name="name" placeholder="Jane Smith" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label for="field-org">Organization <span class="optional">(optional)</span></label>
+          <input type="text" id="field-org" name="organization" placeholder="Community Development Corp." autocomplete="organization" />
+        </div>
+        <div class="form-group">
+          <label for="field-comments">Comments <span class="optional">(optional)</span></label>
+          <textarea id="field-comments" name="comments"
+            placeholder="Any context on your selections, local knowledge of specific tracts, or other considerations…"></textarea>
+        </div>
+        <button class="submit-btn" id="submit-btn">Submit Selections</button>
+        <div class="form-message" id="form-message"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>Project</h4>
+      <p>OZ 2.0 Maryland Tract Analysis<br />
+      Greater Baltimore Committee<br />
+      April 2026</p>
+    </div>
+    <div>
+      <h4>Data Sources</h4>
+      <p>
+        Urban Institute OZ Designation Tool (March 2026)<br />
+        U.S. Census TIGER/Line Shapefiles 2025<br />
+        Baltimore City Open Data (SDAT, Building Permits)<br />
+        MD iMAP Incentive Zones Layer
+      </p>
+    </div>
+    <div>
+      <h4>Methodology</h4>
+      <p>
+        Scoring framework adapted from Ohio's OZ research.<br />
+        Three-stage evaluation: filter &rarr; score &rarr; recommend.<br />
+        113 of 451 eligible Maryland tracts recommended.
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    Data is for planning purposes only and does not constitute legal or investment advice.
+    &copy; 2026 Greater Baltimore Committee. All rights reserved.
+  </div>
+</footer>
+
+<!-- ── Scripts ────────────────────────────────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

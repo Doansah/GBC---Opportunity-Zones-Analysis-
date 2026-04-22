@@ -12,6 +12,11 @@ UrbanInstitute_OZDesignationTool_3_9_2026_0.csv
 *.pkl
 *.db
 *.sqlite
+.gitignore
+
+# -- Data Quality Logging
+data_quality/
+
 
 # ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/

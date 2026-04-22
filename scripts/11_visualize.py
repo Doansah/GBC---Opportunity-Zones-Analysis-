@@ -18,6 +18,7 @@ Dependencies beyond requirements.txt: matplotlib, folium
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
 import folium
@@ -36,7 +37,9 @@ SCORED_CSV    = ROOT / "data" / "output" / "scored_tracts.csv"
 SHP_PATH      = ROOT / "census_tract_shape_files" / "tl_2025_24_tract.shp"
 ELIGIBLE_CSV  = ROOT / "data" / "raw" / "eligible_census_tracts.csv"
 OUT_DIR       = ROOT / "data" / "output" / "maps"
+DOCS_DIR      = ROOT / "docs"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
+DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Visual constants ──────────────────────────────────────────────────────────
 FIG_SIZE        = (12, 10)
@@ -593,6 +596,11 @@ def build_folium_map(
 
     m.save(str(out_path))
     print(f"  Saved {out_path.name}")
+
+    # ── Publish copy to docs/index.html for GitHub Pages ─────────────────────
+    docs_dest = DOCS_DIR / "index.html"
+    shutil.copy2(out_path, docs_dest)
+    print(f"  Copied to {docs_dest} (GitHub Pages)")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 /* ── Configuration ─────────────────────────────────────────────────────────── */
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnjlgevo';
 const GEOJSON_PATH       = 'data/scored_tracts.geojson';
 const MAP_CENTER         = [38.95, -76.75];
 const MAP_ZOOM           = 8;

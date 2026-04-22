@@ -83,12 +83,81 @@ function showTooltip(e, p) {
   const fmtNum = v => (v != null ? Number(v).toLocaleString() : 'N/A');
   const fmtDol = v => (v != null ? '$' + Number(v).toLocaleString() : 'N/A');
   const fmtSco = v => (v != null ? Number(v).toFixed(3) : 'N/A');
+  const fmtRat = v => (v != null ? Number(v).toFixed(2) : 'N/A');
 
   const badgeClass = {
     'Goldilocks':         'goldilocks',
     'Already Attractive': 'already-att',
     'Less Likely':        'less-likely',
   }[p.classification] || '';
+
+  // Score breakdown — only for tracts that were scored (not eliminated)
+  const scored = p.composite_score != null;
+  const scoreBreakdown = scored ? `
+    <div class="tt-section">Score Breakdown</div>
+    <div class="tt-row">
+      <span class="tt-label">Job density</span>
+      <span class="tt-val">${fmtSco(p.job_density_score)} <span class="tt-wt">(30%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Vacancy rate</span>
+      <span class="tt-val">${fmtSco(p.vacancy_rate_score)} <span class="tt-wt">(10%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Home value</span>
+      <span class="tt-val">${fmtSco(p.home_value_inv_score)} <span class="tt-wt">(10%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Ownership rate</span>
+      <span class="tt-val">${fmtSco(p.ownership_inv_score)} <span class="tt-wt">(5%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Poverty</span>
+      <span class="tt-val">${fmtSco(p.poverty_score)} <span class="tt-wt">(18%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Income</span>
+      <span class="tt-val">${fmtSco(p.income_inv_score)} <span class="tt-wt">(12%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Unemployment</span>
+      <span class="tt-val">${fmtSco(p.unemployment_score)} <span class="tt-wt">(8%)</span></span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Education</span>
+      <span class="tt-val">${fmtSco(p.education_inv_score)} <span class="tt-wt">(7%)</span></span>
+    </div>
+  ` : '';
+
+  // Stackability — supplementary context, not a score component
+  const stackNote = (p.stackability_count > 0)
+    ? `Inside ${p.stackability_count} incentive zone(s)`
+    : 'No overlapping incentive zones';
+
+  // Baltimore-only parcel/permit detail (null for non-Baltimore tracts)
+  const hasBaltDetail = p.land_to_value_ratio != null;
+  const baltDetail = hasBaltDetail ? `
+    <div class="tt-section">Local Detail (Baltimore)</div>
+    <div class="tt-row">
+      <span class="tt-label">Land/value ratio</span>
+      <span class="tt-val">${fmtRat(p.land_to_value_ratio)}</span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Vacancy proxy</span>
+      <span class="tt-val">${fmtPct(p.vacancy_proxy)}</span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Owner-occupancy</span>
+      <span class="tt-val">${fmtPct(p.owner_occupancy_rate)}</span>
+    </div>
+    <div class="tt-row">
+      <span class="tt-label">Commercial parcels</span>
+      <span class="tt-val">${fmtPct(p.pct_commercial)}</span>
+    </div>
+  ` : `
+    <div class="tt-section">Local Detail</div>
+    <div class="tt-row tt-muted">Parcel-level data not available for this county.</div>
+  `;
 
   tooltip.innerHTML = `
     <div class="tt-title">${p.geoid} &mdash; ${p.county}</div>
@@ -116,6 +185,10 @@ function showTooltip(e, p) {
       <span class="tt-label">Med. Income</span>
       <span class="tt-val">${fmtDol(p.median_hhincome_2024)}</span>
     </div>
+    ${scoreBreakdown}
+    <div class="tt-section">Additional Context</div>
+    <div class="tt-row tt-muted">${stackNote}</div>
+    ${baltDetail}
   `;
   tooltip.style.display = 'block';
   moveTooltip(e);

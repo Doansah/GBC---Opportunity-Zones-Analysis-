@@ -1,0 +1,11 @@
+metric,value
+total_tracts,451
+advances_to_scoring,359
+eliminated_already_attractive,92
+eliminated_unviable,0
+unviable_non_baltimore,0 — eliminated with no Baltimore permit data
+unviable_actual_zero_jobs,0
+unviable_jobs_nan,0
+metro_median_income_used,"$65,485"
+top_quartile_homevalue_used,"$361,900"
+check_sum_valid,True

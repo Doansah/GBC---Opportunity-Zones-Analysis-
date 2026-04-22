@@ -1,0 +1,10 @@
+scoring_input,weight_pct,n_recommended,n_real_data,n_imputed,pct_imputed
+jobs_2022,30%,113,113,0,0.0%
+land_to_value_ratio,6%,113,69,44,38.9%
+vacancy_proxy,6%,113,69,44,38.9%
+permit_trend,5%,113,69,44,38.9%
+median_sale_price,5%,113,69,44,38.9%
+povrate_2024,15%,113,113,0,0.0%
+median_hhincome_2024,10%,113,113,0,0.0%
+unemprate_2024,8%,113,113,0,0.0%
+stackability_count,15%,113,113,0,0.0%

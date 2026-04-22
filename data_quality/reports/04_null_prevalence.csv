@@ -1,0 +1,135 @@
+table,column,null_count,null_rate,flag
+md_tracts_base,geoid,0,0.0%,ok
+md_tracts_base,state,0,0.0%,ok
+md_tracts_base,county,0,0.0%,ok
+md_tracts_base,oztoolclassification,0,0.0%,ok
+md_tracts_base,likelyrural,0,0.0%,ok
+md_tracts_base,pop_2024,0,0.0%,ok
+md_tracts_base,median_hhincome_2024,4,0.9%,ok
+md_tracts_base,povrate_2024,0,0.0%,ok
+md_tracts_base,unemprate_2024,0,0.0%,ok
+md_tracts_base,jobs_2022,0,0.0%,ok
+md_tracts_base,median_homevalue_2024,23,5.1%,ok
+md_tracts_base,median_grossrent_2024,9,2.0%,ok
+md_tracts_base,pct_own_2024,0,0.0%,ok
+md_tracts_base,pct_severerentburden_2024,1,0.2%,ok
+md_tracts_base,vacancyrate_2024,0,0.0%,ok
+md_tracts_base,pct_age1824_2024,0,0.0%,ok
+md_tracts_base,pct_white_2024,0,0.0%,ok
+md_tracts_base,pct_black_2024,0,0.0%,ok
+md_tracts_base,pct_latino_2024,0,0.0%,ok
+md_tracts_base,pct_aapi_2024,0,0.0%,ok
+md_tracts_base,pct_ba_2024,0,0.0%,ok
+md_tracts_base,cbsa_type,0,0.0%,ok
+md_tracts_base,classification,0,0.0%,ok
+baltimore_tract_property_stats,geoid,0,0.0%,ok
+baltimore_tract_property_stats,total_parcels,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,land_to_value_ratio,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,vacancy_proxy,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,market_activity_count,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,median_sale_price,1,0.5%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,owner_occupancy_rate,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,pct_residential,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,pct_commercial,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,pct_industrial,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_property_stats,assessed_value_per_parcel,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,geoid,0,0.0%,ok
+baltimore_tract_permit_stats,permits_total,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,permits_new_construction,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,permits_residential,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,permits_commercial,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,permit_trend,0,0.0%,by_design (NaN for non-Baltimore tracts)
+baltimore_tract_permit_stats,has_any_permits,0,0.0%,ok
+md_tracts_master,geoid,0,0.0%,ok
+md_tracts_master,state,0,0.0%,ok
+md_tracts_master,county,0,0.0%,ok
+md_tracts_master,oztoolclassification,0,0.0%,ok
+md_tracts_master,likelyrural,0,0.0%,ok
+md_tracts_master,pop_2024,0,0.0%,ok
+md_tracts_master,median_hhincome_2024,4,0.9%,ok
+md_tracts_master,povrate_2024,0,0.0%,ok
+md_tracts_master,unemprate_2024,0,0.0%,ok
+md_tracts_master,jobs_2022,0,0.0%,ok
+md_tracts_master,median_homevalue_2024,23,5.1%,ok
+md_tracts_master,median_grossrent_2024,9,2.0%,ok
+md_tracts_master,pct_own_2024,0,0.0%,ok
+md_tracts_master,pct_severerentburden_2024,1,0.2%,ok
+md_tracts_master,vacancyrate_2024,0,0.0%,ok
+md_tracts_master,pct_age1824_2024,0,0.0%,ok
+md_tracts_master,pct_white_2024,0,0.0%,ok
+md_tracts_master,pct_black_2024,0,0.0%,ok
+md_tracts_master,pct_latino_2024,0,0.0%,ok
+md_tracts_master,pct_aapi_2024,0,0.0%,ok
+md_tracts_master,pct_ba_2024,0,0.0%,ok
+md_tracts_master,cbsa_type,0,0.0%,ok
+md_tracts_master,classification,0,0.0%,ok
+md_tracts_master,total_parcels,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,land_to_value_ratio,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,vacancy_proxy,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,market_activity_count,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,median_sale_price,314,69.6%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=1/138
+md_tracts_master,owner_occupancy_rate,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,pct_residential,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,pct_commercial,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,pct_industrial,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,assessed_value_per_parcel,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,permits_total,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,permits_new_construction,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,permits_residential,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,permits_commercial,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,permit_trend,313,69.4%,by_design (NaN for non-Baltimore tracts) | within_baltimore_nulls=0/138
+md_tracts_master,has_any_permits,0,0.0%,ok
+md_tracts_master,stackability_count,0,0.0%,ok
+md_tracts_master,has_stackability,0,0.0%,ok
+scored_tracts,geoid,0,0.0%,ok
+scored_tracts,state,0,0.0%,ok
+scored_tracts,county,0,0.0%,ok
+scored_tracts,oztoolclassification,0,0.0%,ok
+scored_tracts,likelyrural,0,0.0%,ok
+scored_tracts,pop_2024,0,0.0%,ok
+scored_tracts,median_hhincome_2024,4,0.9%,ok
+scored_tracts,povrate_2024,0,0.0%,ok
+scored_tracts,unemprate_2024,0,0.0%,ok
+scored_tracts,jobs_2022,0,0.0%,ok
+scored_tracts,median_homevalue_2024,23,5.1%,ok
+scored_tracts,median_grossrent_2024,9,2.0%,ok
+scored_tracts,pct_own_2024,0,0.0%,ok
+scored_tracts,pct_severerentburden_2024,1,0.2%,ok
+scored_tracts,vacancyrate_2024,0,0.0%,ok
+scored_tracts,pct_age1824_2024,0,0.0%,ok
+scored_tracts,pct_white_2024,0,0.0%,ok
+scored_tracts,pct_black_2024,0,0.0%,ok
+scored_tracts,pct_latino_2024,0,0.0%,ok
+scored_tracts,pct_aapi_2024,0,0.0%,ok
+scored_tracts,pct_ba_2024,0,0.0%,ok
+scored_tracts,cbsa_type,0,0.0%,ok
+scored_tracts,classification,0,0.0%,ok
+scored_tracts,total_parcels,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,land_to_value_ratio,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,vacancy_proxy,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,market_activity_count,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,median_sale_price,314,69.6%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,owner_occupancy_rate,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,pct_residential,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,pct_commercial,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,pct_industrial,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,assessed_value_per_parcel,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,permits_total,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,permits_new_construction,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,permits_residential,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,permits_commercial,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,permit_trend,313,69.4%,by_design (NaN for non-Baltimore tracts)
+scored_tracts,has_any_permits,0,0.0%,ok
+scored_tracts,stackability_count,0,0.0%,ok
+scored_tracts,has_stackability,0,0.0%,ok
+scored_tracts,stage1_result,0,0.0%,ok
+scored_tracts,job_density_score,92,20.4%,moderate null rate
+scored_tracts,dev_capacity_score,92,20.4%,moderate null rate
+scored_tracts,market_momentum_score,92,20.4%,moderate null rate
+scored_tracts,poverty_score,92,20.4%,moderate null rate
+scored_tracts,income_score,96,21.3%,moderate null rate
+scored_tracts,unemployment_score,92,20.4%,moderate null rate
+scored_tracts,stackability_score,92,20.4%,moderate null rate
+scored_tracts,composite_score,96,21.3%,ok (NaN for eliminated tracts)
+scored_tracts,rank,92,20.4%,moderate null rate
+scored_tracts,recommended,0,0.0%,ok

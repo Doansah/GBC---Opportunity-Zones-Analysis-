@@ -35,14 +35,26 @@ print(f"  Metro median household income: ${metro_median_income:,.0f}")
 print(f"  Top quartile home value (75th pct): ${top_quartile_homevalue:,.0f}")
 
 # ── Stage 1 filter logic ──────────────────────────────────────────────────────
-# Unviable: low jobs AND extreme poverty AND zero permit activity
-# Note: for non-Baltimore tracts, has_any_permits == 0 because we have no data.
-# We only apply this filter if jobs_2022 and povrate_2024 also qualify.
-unviable_mask = (
+# Unviable filter is applied in two tiers:
+#   Baltimore City (geoid starts "24510"): all three conditions required
+#     (permit data exists, so has_any_permits == 0 is meaningful)
+#   Non-Baltimore: two conditions only — no permit data to check
+balt_mask = df["geoid"].str.startswith("24510")
+
+balt_unviable = (
+    balt_mask &
     (df["jobs_2022"].fillna(0) < 200) &
     (df["povrate_2024"].fillna(0) > 0.45) &
     (df["has_any_permits"].fillna(0) == 0)
 )
+
+nonbalt_unviable = (
+    ~balt_mask &
+    (df["jobs_2022"].fillna(0) < 200) &
+    (df["povrate_2024"].fillna(0) > 0.45)
+)
+
+unviable_mask = balt_unviable | nonbalt_unviable
 
 # Already attractive: income above metro median AND home values in top quartile
 already_attractive_mask = (
@@ -62,6 +74,17 @@ for label, n in counts.items():
     print(f"  {label}: {n}")
 
 assert counts.sum() == 451, "Row count mismatch after filtering"
+
+# ── Goldilocks / Already-Attractive overlap check ─────────────────────────────
+goldilocks_eliminated = df[
+    already_attractive_mask &
+    (df["classification"] == "Goldilocks")
+]
+if len(goldilocks_eliminated) > 0:
+    print(f"\nWARNING: {len(goldilocks_eliminated)} Goldilocks tracts eliminated by Already Attractive filter:")
+    print(goldilocks_eliminated[["geoid", "county", "median_hhincome_2024", "median_homevalue_2024"]].to_string(index=False))
+else:
+    print("\nOK: No Goldilocks tracts eliminated by Already Attractive filter.")
 
 # ── Save ──────────────────────────────────────────────────────────────────────
 df.to_csv(OUT_PATH, index=False)

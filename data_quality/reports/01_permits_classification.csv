@@ -1,0 +1,11 @@
+metric,value
+total_permits,278264
+classified_new_construction,1600 (0.6%)
+classified_residential,50745 (18.2%)
+classified_commercial,9435 (3.4%)
+unclassified_any,218528 (78.5%)
+overlap_residential_and_commercial,980 (0.4%)
+overlap_new_construction_and_residential,871 (0.3%)
+missing_description,2 (0.0%)
+missing_permit_type,6510 (2.3%)
+date_parse_failures_nat,0 (0.0%)

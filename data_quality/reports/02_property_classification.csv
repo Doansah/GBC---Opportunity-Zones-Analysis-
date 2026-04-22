@@ -1,0 +1,23 @@
+metric,value
+total_parcels,237131
+classified_residential,193757 (81.7%)
+classified_commercial,9426 (4.0%)
+classified_industrial,2244 (0.9%)
+unclassified_use,31704 (13.4%)
+overlap_res_and_comm,0 (0.0%)
+flagged_vacant_by_vacind,11746 (5.0%)
+flagged_vacant_by_zeroimpr,29308 (12.4%)
+flagged_vacant_either,39855 (16.8%)
+vacind_Y,11746
+vacind_N,17198
+vacind_null,208187
+vacind_other_values,{}
+ownmde_Y,0
+ownmde_H,0
+ownmde_null,0
+ownmde_other_values,"{'F': 150743, 'L': 58129, '': 28258, '3': 1}"
+parcels_classified_owner_occ,0 (0.0%) — NOTE: script expects Y/H
+zero_or_negative_fullcash,219493 (92.6%)
+zero_or_negative_salepric,68589 (28.9%)
+missing_usegroup,0 (0.0%)
+missing_propdesc,2 (0.0%)

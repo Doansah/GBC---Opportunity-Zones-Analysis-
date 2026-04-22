@@ -1,0 +1,114 @@
+geoid,county,classification,rank,composite_score,data_confidence_pct,low_confidence
+24510040200,Baltimore city,Already Attractive,1.0,0.7148096040492014,100.0%,False
+24510070400,Baltimore city,Already Attractive,2.0,0.5955546656912792,100.0%,False
+24510060400,Baltimore city,Goldilocks,3.0,0.5463856257836788,100.0%,False
+24510260605,Baltimore city,Already Attractive,4.0,0.5279622808503862,100.0%,False
+24005490900,Baltimore County,Goldilocks,5.0,0.4861431822903942,78.0%,False
+24033980000,Prince George's County,Already Attractive,6.0,0.4761996052561246,78.0%,False
+24021751003,Frederick County,Already Attractive,7.0,0.4723329564757435,78.0%,False
+24510150600,Baltimore city,Less Likely,8.0,0.4526702948373312,100.0%,False
+24510260404,Baltimore city,Already Attractive,9.0,0.4497629409190397,100.0%,False
+24510200400,Baltimore city,Less Likely,10.0,0.434497869627399,100.0%,False
+24033803602,Prince George's County,Already Attractive,11.0,0.4326450576732298,78.0%,False
+24015030400,Cecil County,Less Likely,12.0,0.4277867423167256,78.0%,False
+24510090800,Baltimore city,Already Attractive,13.0,0.4262291001365735,100.0%,False
+24510120202,Baltimore city,Already Attractive,14.0,0.4202427772512188,100.0%,False
+24510150200,Baltimore city,Already Attractive,15.0,0.4181443453153,100.0%,False
+24510110200,Baltimore city,Goldilocks,16.0,0.4164124263715658,100.0%,False
+24510271700,Baltimore city,Less Likely,17.0,0.4158038348738115,100.0%,False
+24510140200,Baltimore city,Goldilocks,18.0,0.4146144702386207,100.0%,False
+24510170300,Baltimore city,Less Likely,19.0,0.4124243491710497,100.0%,False
+24001001000,Allegany County,Less Likely,20.0,0.412373510504209,78.0%,False
+24510250500,Baltimore city,Less Likely,21.0,0.4087274858158402,100.0%,False
+24510100100,Baltimore city,Less Likely,22.0,0.4071178693537529,100.0%,False
+24043000900,Washington County,Already Attractive,23.0,0.4070889305064251,78.0%,False
+24510250205,Baltimore city,Less Likely,24.0,0.4067797889339784,100.0%,False
+24510250600,Baltimore city,Already Attractive,25.0,0.4067692268479093,100.0%,False
+24025302901,Harford County,Less Likely,26.0,0.4047643534629494,78.0%,False
+24510280102,Baltimore city,Less Likely,27.0,0.4023540201323596,100.0%,False
+24510150400,Baltimore city,Less Likely,28.0,0.3954805520874643,100.0%,False
+24510080302,Baltimore city,Less Likely,29.0,0.3953637009759798,100.0%,False
+24510250301,Baltimore city,Goldilocks,30.0,0.394273970648993,100.0%,False
+24510200200,Baltimore city,Less Likely,31.0,0.3938197332703952,100.0%,False
+24510120600,Baltimore city,Less Likely,32.0,0.3937021827569383,100.0%,False
+24510170200,Baltimore city,Already Attractive,33.0,0.3933082359961647,100.0%,False
+24510210100,Baltimore city,Goldilocks,34.0,0.3927186966185683,100.0%,False
+24510250103,Baltimore city,Less Likely,35.0,0.3920254462106738,100.0%,False
+24510250303,Baltimore city,Less Likely,36.0,0.3917669185220959,100.0%,False
+24510280600,Baltimore city,Goldilocks,37.0,0.3896530043037861,100.0%,False
+24510160300,Baltimore city,Less Likely,38.0,0.3896408263721662,100.0%,False
+24045000400,Wicomico County,Less Likely,39.0,0.3877573629192786,78.0%,False
+24510170100,Baltimore city,Goldilocks,40.0,0.386686357086856,100.0%,False
+24510160600,Baltimore city,Less Likely,41.0,0.3864838204434169,100.0%,False
+24510150500,Baltimore city,Less Likely,42.0,0.3858571028825175,100.0%,False
+24510160400,Baltimore city,Less Likely,43.0,0.3855429580563271,100.0%,False
+24045000500,Wicomico County,Less Likely,44.0,0.3845894075054396,78.0%,False
+24005452300,Baltimore County,Less Likely,45.0,0.3794654004693472,78.0%,False
+24005492700,Baltimore County,Goldilocks,46.0,0.3793499812934066,78.0%,False
+24510271802,Baltimore city,Less Likely,47.0,0.3786056387198954,100.0%,False
+24510200500,Baltimore city,Already Attractive,48.0,0.3770905815125042,100.0%,False
+24510110100,Baltimore city,Less Likely,49.0,0.3761347809058349,100.0%,False
+24510160700,Baltimore city,Less Likely,50.0,0.3739863454069335,100.0%,False
+24510090600,Baltimore city,Less Likely,51.0,0.3731012389467452,100.0%,False
+24510260501,Baltimore city,Goldilocks,52.0,0.3724889534009659,100.0%,False
+24510280500,Baltimore city,Goldilocks,53.0,0.3711956444741581,100.0%,False
+24510070200,Baltimore city,Less Likely,54.0,0.3687927555917588,100.0%,False
+24033804001,Prince George's County,Less Likely,55.0,0.3674551891132556,78.0%,False
+24510130400,Baltimore city,Less Likely,56.0,0.3669275441663273,100.0%,False
+24031700713,Montgomery County,Less Likely,57.0,0.366836408974853,78.0%,False
+24017850901,Charles County,Already Attractive,58.0,0.3666750980248198,78.0%,False
+24043000500,Washington County,Less Likely,59.0,0.366065325815499,78.0%,False
+24510080301,Baltimore city,Less Likely,60.0,0.3649203599731875,100.0%,False
+24510271600,Baltimore city,Less Likely,61.0,0.3647474804615436,100.0%,False
+24510160100,Baltimore city,Already Attractive,62.0,0.3642930743027888,100.0%,False
+24043000700,Washington County,Less Likely,63.0,0.363475644575354,78.0%,False
+24510200800,Baltimore city,Goldilocks,64.0,0.3627320922017758,100.0%,False
+24033806712,Prince George's County,Less Likely,65.0,0.3610992672016556,78.0%,False
+24005420401,Baltimore County,Less Likely,66.0,0.359998147438739,78.0%,False
+24045000300,Wicomico County,Already Attractive,67.0,0.3596021046649285,78.0%,False
+24510080600,Baltimore city,Less Likely,68.0,0.3588784441943041,100.0%,False
+24510160500,Baltimore city,Less Likely,69.0,0.35820108203744,100.0%,False
+24045000200,Wicomico County,Less Likely,70.0,0.3568601624120077,78.0%,False
+24510200300,Baltimore city,Already Attractive,71.0,0.3562050695212698,100.0%,False
+24510140300,Baltimore city,Less Likely,72.0,0.3560906618017727,100.0%,False
+24005430300,Baltimore County,Less Likely,73.0,0.3504177661448366,78.0%,False
+24003730205,Anne Arundel County,Less Likely,74.0,0.3500163326873827,78.0%,False
+24510150100,Baltimore city,Goldilocks,75.0,0.3489218634084022,100.0%,False
+24043000800,Washington County,Less Likely,76.0,0.3483203655876807,78.0%,False
+24510260303,Baltimore city,Goldilocks,77.0,0.3480338201762538,100.0%,False
+24025306100,Harford County,Less Likely,78.0,0.3478165354216596,78.0%,False
+24005421000,Baltimore County,Less Likely,79.0,0.3467356594499255,78.0%,False
+24510080400,Baltimore city,Already Attractive,80.0,0.3463821050455843,100.0%,False
+24510090700,Baltimore city,Less Likely,81.0,0.3461766649456401,100.0%,False
+24033803525,Prince George's County,Less Likely,82.0,0.3459432314655795,78.0%,False
+24005420900,Baltimore County,Less Likely,83.0,0.3449196888684819,78.0%,False
+24033803403,Prince George's County,Less Likely,84.0,0.3442793510611782,78.0%,False
+24510070100,Baltimore city,Less Likely,85.0,0.3439448740943107,100.0%,False
+24043000400,Washington County,Less Likely,86.0,0.3439289308657958,78.0%,False
+24025301302,Harford County,Less Likely,87.0,0.3428456567042812,78.0%,False
+24041960300,Talbot County,Already Attractive,88.0,0.3423770997493079,78.0%,False
+24031700721,Montgomery County,Less Likely,89.0,0.3419992784418088,78.0%,False
+24005403402,Baltimore County,Goldilocks,90.0,0.3419151431911347,78.0%,False
+24510151000,Baltimore city,Less Likely,91.0,0.3398327907890776,100.0%,False
+24510190100,Baltimore city,Less Likely,92.0,0.3396930135846923,100.0%,False
+24001000500,Allegany County,Less Likely,93.0,0.3394713373033788,78.0%,False
+24510130100,Baltimore city,Less Likely,94.0,0.3389424194909516,100.0%,False
+24510250206,Baltimore city,Already Attractive,95.0,0.3386083808919959,100.0%,False
+24045010503,Wicomico County,Already Attractive,96.0,0.3379243161615886,78.0%,False
+24510272007,Baltimore city,Less Likely,97.0,0.3379156987946962,100.0%,False
+24510151300,Baltimore city,Less Likely,98.0,0.337723292733416,100.0%,False
+24510090400,Baltimore city,Less Likely,99.0,0.3372154777825322,100.0%,False
+24011955600,Caroline County,Less Likely,100.0,0.3371122200388811,78.0%,False
+24510090900,Baltimore city,Goldilocks,101.0,0.3370414407050533,100.0%,False
+24033805908,Prince George's County,Goldilocks,102.0,0.3357466536568784,78.0%,False
+24510160200,Baltimore city,Less Likely,103.0,0.3328933883344353,100.0%,False
+24031701509,Montgomery County,Less Likely,104.0,0.332075676550377,78.0%,False
+24037875903,St. Mary's County,Already Attractive,105.0,0.3317706572995235,78.0%,False
+24510210200,Baltimore city,Goldilocks,106.0,0.3308227705707031,100.0%,False
+24510080102,Baltimore city,Less Likely,107.0,0.3307577603683722,100.0%,False
+24005430900,Baltimore County,Less Likely,108.0,0.3300240902324419,78.0%,False
+24001001100,Allegany County,Less Likely,109.0,0.3297980797710426,78.0%,False
+24510180300,Baltimore city,Goldilocks,110.0,0.3289267790754316,100.0%,False
+24510150701,Baltimore city,Less Likely,111.0,0.328701670678899,100.0%,False
+24011955302,Caroline County,Less Likely,112.0,0.3285606136304329,78.0%,False
+24043000302,Washington County,Less Likely,113.0,0.328210950345815,78.0%,False

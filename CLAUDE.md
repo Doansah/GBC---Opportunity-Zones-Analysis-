@@ -323,3 +323,4 @@ This is mandatory — do not end a session without creating the iteration folder
 | # | Folder | Summary |
 |---|--------|---------|
 | 01 | `iterations/01_2026-04-10_1634/` | Full pipeline built and executed end-to-end: 10 scripts, 237k parcels + 278k permits pulled, 451 MD tracts scored, 113 recommended designations produced |
+| 02 | `iterations/02_2026-04-22_1200/` | Scoring V2: rebuilt scoring around 8 zero-null ACS inputs; removed Baltimore-only and stackability from score; fixed unviable filter; added null guard; created GeoJSON export (script 11); updated site tooltip and methodology page |

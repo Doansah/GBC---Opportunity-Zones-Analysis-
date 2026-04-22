@@ -1,0 +1,4 @@
+dataset,duplicate_key,total_rows,duplicate_rows,pct
+parcels,BLOCKLOT,237131,0,0.0%
+permits,permit_number,278264,0,0.0%
+permits,address + description + issue_date,278264,192,0.1%

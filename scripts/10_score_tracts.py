@@ -4,18 +4,21 @@
 Stage 2: Weighted composite scoring of tracts that advanced through Stage 1 filters.
 
 Scoring weights (must sum to 1.0):
-  Investment Viability (52%):
-    - job_density_score        30%
-    - development_capacity     12%  (land_to_value_ratio + vacancy_proxy)
-    - market_momentum          10%  (permit_trend + median_sale_price_inv)
+  Investment Viability (55%):
+    - job_density_score        30%   minmax(jobs_2022)
+    - vacancy_rate_score       10%   minmax(vacancyrate_2024)
+    - home_value_inv_score     10%   inverse_minmax(median_homevalue_2024)
+    - ownership_inv_score       5%   inverse_minmax(pct_own_2024)
 
-  Community Need (33%):
-    - poverty_score            15%  (moderate distress preferred; extreme penalised)
-    - income_score             10%  (inverse — lower income = higher need)
-    - unemployment_score        8%
+  Community Need (45%):
+    - poverty_score            18%   bell curve peaking at 0.28, penalty >0.45
+    - income_inv_score         12%   inverse_minmax(median_hhincome_2024)
+    - unemployment_score        8%   minmax(unemprate_2024)
+    - education_inv_score       7%   inverse_minmax(pct_ba_2024)
 
-  Stackability (15%):
-    - stackability_score       15%
+All 8 inputs are ACS-derived variables present for all 451 MD tracts (zero nulls).
+Baltimore-only data (SDAT parcels, permits) and stackability remain in the output
+file as supplementary display columns but do not feed the composite score.
 
 Input:  data/processed/md_tracts_filtered.csv
 Output: data/output/scored_tracts.csv
@@ -25,11 +28,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-try:
-    from sklearn.preprocessing import MinMaxScaler  # noqa: F401
-    HAS_SKLEARN = True
-except ImportError:
-    HAS_SKLEARN = False
 
 ROOT = Path(__file__).resolve().parent.parent
 IN_PATH = ROOT / "data" / "processed" / "md_tracts_filtered.csv"
@@ -53,66 +51,100 @@ def inverse_minmax(series: pd.Series) -> pd.Series:
     return 1 - minmax(series)
 
 
+def poverty_score(pov: pd.Series) -> pd.Series:
+    """Bell-curve score peaking at ~28% poverty; penalty above 45%."""
+    pov = pov.fillna(0.25)
+    score = 1 - np.abs(pov - 0.28) / 0.28
+    score = score.clip(0, 1)
+    score = np.where(pov > 0.45, score * 0.5, score)
+    return pd.Series(score, index=pov.index)
+
+
 # ── Load ──────────────────────────────────────────────────────────────────────
 print(f"Loading {IN_PATH}…")
 df = pd.read_csv(IN_PATH, dtype={"geoid": str})
 print(f"  Total rows: {len(df)}")
 
-# Work on advancing tracts only; we'll append eliminated tracts at the end
+# Work on advancing tracts only; append eliminated tracts at the end
 advancing = df[df["stage1_result"] == "Advances to Scoring"].copy()
 eliminated = df[df["stage1_result"] != "Advances to Scoring"].copy()
 print(f"  Advancing tracts: {len(advancing)}")
 print(f"  Eliminated tracts: {len(eliminated)}")
 
+# ── NULL GUARD ────────────────────────────────────────────────────────────────
+# Six of the 8 inputs are guaranteed non-null across all 451 tracts.
+# Two (median_homevalue_2024, median_hhincome_2024) can be null in the Urban
+# Institute source for tracts with zero owner-occupied units or near-zero
+# household counts. Impute these with the advancing-tract median and log every
+# affected tract explicitly — no silent imputation.
+GUARANTEED_INPUTS = [
+    "jobs_2022", "vacancyrate_2024", "pct_own_2024",
+    "povrate_2024", "unemprate_2024", "pct_ba_2024",
+]
+IMPUTABLE_INPUTS = ["median_homevalue_2024", "median_hhincome_2024"]
+SCORE_INPUTS = GUARANTEED_INPUTS + IMPUTABLE_INPUTS
+
+# Hard halt if any guaranteed-non-null input has nulls
+guaranteed_nulls = advancing[GUARANTEED_INPUTS].isnull().sum()
+if guaranteed_nulls.any():
+    print("\nERROR — unexpected nulls in guaranteed-complete scoring inputs:")
+    print(guaranteed_nulls[guaranteed_nulls > 0])
+    raise SystemExit(1)
+
+# Explicit imputation for known-nullable inputs
+for col in IMPUTABLE_INPUTS:
+    null_rows = advancing[advancing[col].isnull()]
+    if len(null_rows) > 0:
+        impute_val = advancing[col].median()
+        print(f"\nWARNING: {len(null_rows)} advancing tracts have null {col} "
+              f"— imputing with advancing-tract median ({impute_val:,.0f}):")
+        print(null_rows[["geoid", "county", "classification"]].to_string(index=False))
+        advancing[col] = advancing[col].fillna(impute_val)
+
+# Verify zero nulls after imputation
+final_nulls = advancing[SCORE_INPUTS].isnull().sum()
+if final_nulls.any():
+    print("\nERROR — nulls remain after imputation:")
+    print(final_nulls[final_nulls > 0])
+    raise SystemExit(1)
+print("\nNull check passed — all 8 scoring inputs are complete for advancing tracts.")
+
 # ── Sub-scores ────────────────────────────────────────────────────────────────
 
 # 1. Job density (30%) — higher jobs = better investment viability
-advancing["job_density_score"] = minmax(advancing["jobs_2022"].fillna(0))
+advancing["job_density_score"]    = minmax(advancing["jobs_2022"])
 
-# 2. Development capacity (12%) — average of land_to_value_ratio and vacancy_proxy
-#    Both higher = more development potential
-lv = minmax(advancing.get("land_to_value_ratio", pd.Series(np.nan, index=advancing.index)).fillna(advancing.get("land_to_value_ratio", pd.Series()).median()))
-vac = minmax(advancing.get("vacancy_proxy", pd.Series(np.nan, index=advancing.index)).fillna(0.1))
-advancing["dev_capacity_score"] = (lv + vac) / 2
+# 2. Vacancy rate (10%) — higher ACS vacancy = more development capacity
+advancing["vacancy_rate_score"]   = minmax(advancing["vacancyrate_2024"])
 
-# 3. Market momentum (10%) — permit trend (higher = better) + inverse sale price
-#    (lower sale prices relative to peers = more upside / affordability for developers)
-pt = minmax(advancing.get("permit_trend", pd.Series(np.nan, index=advancing.index)).fillna(1.0))
-sp_inv = inverse_minmax(advancing.get("median_sale_price", pd.Series(np.nan, index=advancing.index)).fillna(advancing.get("median_sale_price", pd.Series()).median()))
-advancing["market_momentum_score"] = (pt + sp_inv) / 2
+# 3. Home value inverse (10%) — lower value = more development upside
+advancing["home_value_inv_score"] = inverse_minmax(advancing["median_homevalue_2024"])
 
-# 4. Poverty score (15%) — sweet spot 20-35%; cap extreme distress
-# Map poverty rate to a bell-curve-like score: peak around 0.28 (28%)
-def poverty_score(pov: pd.Series) -> pd.Series:
-    pov = pov.fillna(0.25)
-    # Score declines for very low poverty (less need) and very high poverty (less viable)
-    # Peak score at ~28% poverty
-    score = 1 - np.abs(pov - 0.28) / 0.28
-    score = score.clip(0, 1)
-    # Extra penalty for extreme distress (>45%)
-    score = np.where(pov > 0.45, score * 0.5, score)
-    return pd.Series(score, index=pov.index)
+# 4. Ownership rate inverse (5%) — lower owner-occupancy = more Goldilocks signal
+advancing["ownership_inv_score"]  = inverse_minmax(advancing["pct_own_2024"])
 
-advancing["poverty_score"] = poverty_score(advancing["povrate_2024"])
+# 5. Poverty score (18%) — sweet spot 20-35%; cap extreme distress
+advancing["poverty_score"]        = poverty_score(advancing["povrate_2024"])
 
-# 5. Income score (10%) — lower income = higher need
-advancing["income_score"] = inverse_minmax(advancing["median_hhincome_2024"])
+# 6. Income inverse (12%) — lower income = higher need
+advancing["income_inv_score"]     = inverse_minmax(advancing["median_hhincome_2024"])
 
-# 6. Unemployment score (8%) — higher unemployment = higher need
-advancing["unemployment_score"] = minmax(advancing["unemprate_2024"].fillna(advancing["unemprate_2024"].median()))
+# 7. Unemployment score (8%) — higher unemployment = higher need
+advancing["unemployment_score"]   = minmax(advancing["unemprate_2024"])
 
-# 7. Stackability score (15%) — 0 to 3 overlapping zones -> normalise to [0,1]
-advancing["stackability_score"] = (advancing["stackability_count"].fillna(0) / 3).clip(0, 1)
+# 8. Education inverse (7%) — lower BA attainment = higher need
+advancing["education_inv_score"]  = inverse_minmax(advancing["pct_ba_2024"])
 
 # ── Composite score ───────────────────────────────────────────────────────────
 WEIGHTS = {
     "job_density_score":    0.30,
-    "dev_capacity_score":   0.12,
-    "market_momentum_score":0.10,
-    "poverty_score":        0.15,
-    "income_score":         0.10,
+    "vacancy_rate_score":   0.10,
+    "home_value_inv_score": 0.10,
+    "ownership_inv_score":  0.05,
+    "poverty_score":        0.18,
+    "income_inv_score":     0.12,
     "unemployment_score":   0.08,
-    "stackability_score":   0.15,
+    "education_inv_score":  0.07,
 }
 assert abs(sum(WEIGHTS.values()) - 1.0) < 1e-9, "Weights must sum to 1.0"
 

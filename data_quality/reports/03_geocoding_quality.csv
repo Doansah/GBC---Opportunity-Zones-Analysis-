@@ -1,0 +1,3 @@
+dataset,total_records,missing_coord,matched_geoid_not_null,unmatched_null_geoid,unique_tracts_matched,expected_baltimore_tracts,tracts_with_zero_records,min_records_per_tract,p25_records_per_tract,median_records_per_tract,p75_records_per_tract,max_records_per_tract
+parcels,237131,0 (0.0%),236881 (99.9%),250 (0.1%),184,199,15,6,839,1208,1523,2474
+permits,278264,0 (0.0%),278224 (100.0%),40 (0.0%),192,199,7,6,959,1344,1861,3987

@@ -21,14 +21,22 @@
 
 <!-- ── Sticky nav ─────────────────────────────────────────────────────────── -->
 <nav class="site-nav">
-  <a class="brand" href="#">GBC &mdash; Opportunity Zones 2.0</a>
+  <a class="brand" href="#">
+    <img src="gbc-logo.png" alt="GBC" class="brand-logo" />
+    GBC &mdash; Opportunity Zones 2.0
+  </a>
   <ul>
-    <li><a href="#background">Background</a></li>
-    <li><a href="#methodology">Methodology</a></li>
-    <li><a href="#map-section">Map</a></li>
-    <li><a href="#submit-section">Submit</a></li>
+    <li><a href="#background"  data-page="background">Background</a></li>
+    <li><a href="#methodology" data-page="methodology">Methodology</a></li>
+    <li><a href="#map"         data-page="map">Map</a></li>
+    <li><a href="#submit"      data-page="submit">Submit</a></li>
   </ul>
 </nav>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Page: Background
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="page" data-page="background">
 
 <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
 <header class="hero">
@@ -39,7 +47,7 @@
     under the new 2027 program. This tool presents our data-driven recommendations
     and invites stakeholders to share their priorities.
   </p>
-  <a href="#map-section" class="hero-cta">Explore the Map &amp; Vote</a>
+  <a href="#map" class="hero-cta" data-page="map">Explore the Map &amp; Vote</a>
 </header>
 
 <!-- ── Background ─────────────────────────────────────────────────────────── -->
@@ -93,6 +101,13 @@
     </div>
   </div>
 </section>
+
+</div><!-- /.page[background] -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Page: Methodology
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="page" data-page="methodology" style="display:none">
 
 <!-- ── Methodology ─────────────────────────────────────────────────────────── -->
 <section id="methodology">
@@ -222,6 +237,13 @@
   </div>
 </section>
 
+</div><!-- /.page[methodology] -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Page: Map
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="page" data-page="map" style="display:none">
+
 <!-- ── Interactive Map ─────────────────────────────────────────────────────── -->
 <section id="map-section">
   <!-- Controls bar -->
@@ -264,8 +286,15 @@
   </div>
 </section>
 
-<!-- Floating tooltip (positioned by JS) -->
+</div><!-- /.page[map] -->
+
+<!-- Floating tooltip (positioned by JS — must be outside page divs) -->
 <div id="map-tooltip"></div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     Page: Submit
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="page" data-page="submit" style="display:none">
 
 <!-- ── Submit ─────────────────────────────────────────────────────────────── -->
 <section id="submit-section">
@@ -302,11 +331,11 @@
       <div>
         <div class="form-group">
           <label for="field-name">Your Name <span style="color:#dc2626">*</span></label>
-          <input type="text" id="field-name" name="name" placeholder="Jane Smith" autocomplete="name" />
+          <input type="text" id="field-name" name="name"  autocomplete="name" />
         </div>
         <div class="form-group">
           <label for="field-org">Organization <span class="optional">(optional)</span></label>
-          <input type="text" id="field-org" name="organization" placeholder="Community Development Corp." autocomplete="organization" />
+          <input type="text" id="field-org" name="organization"  autocomplete="organization" />
         </div>
         <div class="form-group">
           <label for="field-comments">Comments <span class="optional">(optional)</span></label>
@@ -320,7 +349,9 @@
   </div>
 </section>
 
-<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+</div><!-- /.page[submit] -->
+
+<!-- ── Footer (visible on all pages) ─────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
     <div>

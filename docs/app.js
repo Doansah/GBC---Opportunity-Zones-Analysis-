@@ -1,3 +1,43 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPA Router — tab-based page navigation
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const VALID_PAGES = ['background', 'methodology', 'map', 'submit'];
+
+function showPage(name) {
+  if (!VALID_PAGES.includes(name)) name = 'background';
+
+  document.querySelectorAll('.page[data-page]').forEach(div => {
+    div.style.display = div.dataset.page === name ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('.site-nav a[data-page]').forEach(a => {
+    a.classList.toggle('nav-active', a.dataset.page === name);
+  });
+
+  if (name === 'map') {
+    // Leaflet initialises on a hidden container — force correct size on reveal
+    setTimeout(() => { if (typeof map !== 'undefined') map.invalidateSize(); }, 10);
+  }
+
+  window.scrollTo(0, 0);
+}
+
+function routeFromHash() {
+  showPage(window.location.hash.replace('#', '') || 'background');
+}
+
+// Wire nav links and hero CTA
+document.querySelectorAll('.site-nav a[data-page], .hero-cta[data-page]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    window.location.hash = '#' + a.dataset.page;
+  });
+});
+
+window.addEventListener('hashchange', routeFromHash);
+document.addEventListener('DOMContentLoaded', routeFromHash);
+
 /* ── Configuration ─────────────────────────────────────────────────────────── */
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnjlgevo';
 const GEOJSON_PATH       = 'data/scored_tracts.geojson';
@@ -361,6 +401,106 @@ function updateLegend() {
   el.innerHTML = currentMode === 'score' ? scoreLegendHTML : classLegendHTML;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Incentive Zone Layer Panel
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const IMAP_LAYERS = [
+  { id: 'enterprise_zones',            label: 'Enterprise Zones',          color: '#e63946' },
+  { id: 'enterprise_zone_focus_areas', label: 'EZ Focus Areas',            color: '#f4845f' },
+  { id: 'sustainable_communities',     label: 'Sustainable Communities',   color: '#2a9d8f' },
+  { id: 'rise_zones',                  label: 'RISE Zones',                color: '#9b5de5' },
+  { id: 'opportunity_zones',           label: 'Opportunity Zones (Fed.)',  color: '#0077b6' },
+  { id: 'qualified_census_tracts',     label: 'Qualified Census Tracts',   color: '#ff9f1c' },
+];
+
+const imapLeafletLayers = {};
+const imapLoadState    = {};
+IMAP_LAYERS.forEach(d => { imapLeafletLayers[d.id] = null; imapLoadState[d.id] = 'idle'; });
+
+const LayerPanelControl = L.Control.extend({
+  onAdd(map) {
+    const container = L.DomUtil.create('div', 'leaflet-layer-panel');
+    container.innerHTML = `
+      <div id="layer-panel-header">
+        Incentive Zones <span class="panel-toggle-icon">&#9650;</span>
+      </div>
+      <div id="layer-panel-body"></div>`;
+
+    container.querySelector('#layer-panel-header').addEventListener('click', () => {
+      container.classList.toggle('collapsed');
+    });
+
+    const body = container.querySelector('#layer-panel-body');
+    IMAP_LAYERS.forEach(def => {
+      const row = document.createElement('label');
+      row.className = 'layer-row';
+      row.innerHTML = `
+        <input type="checkbox" id="layer-cb-${def.id}" data-layer-id="${def.id}" />
+        <span class="layer-swatch" style="background:${def.color}22;border-color:${def.color}"></span>
+        <span class="layer-label">${def.label}</span>`;
+      body.appendChild(row);
+      row.querySelector('input').addEventListener('change', e => handleLayerToggle(def, e.target.checked));
+    });
+
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.disableScrollPropagation(container);
+    return container;
+  }
+});
+
+new LayerPanelControl({ position: 'topright' }).addTo(map);
+
+async function handleLayerToggle(def, isOn) {
+  if (!isOn) {
+    if (imapLeafletLayers[def.id]) map.removeLayer(imapLeafletLayers[def.id]);
+    return;
+  }
+  if (imapLoadState[def.id] === 'idle') await loadImapLayer(def);
+  if (imapLeafletLayers[def.id] && imapLoadState[def.id] === 'loaded') {
+    imapLeafletLayers[def.id].addTo(map);
+  }
+}
+
+async function loadImapLayer(def) {
+  imapLoadState[def.id] = 'loading';
+  setLayerStatus(def.id, 'loading');
+  try {
+    const resp = await fetch('data/imap/' + def.id + '.geojson');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    imapLeafletLayers[def.id] = L.geoJSON(data, {
+      interactive: false,   // clicks pass through to tract layer below
+      style: {
+        color:       def.color,
+        weight:      2,
+        opacity:     0.85,
+        fillColor:   def.color,
+        fillOpacity: 0.12,
+      },
+    });
+    imapLoadState[def.id] = 'loaded';
+    setLayerStatus(def.id, 'loaded');
+  } catch (err) {
+    imapLoadState[def.id] = 'error';
+    setLayerStatus(def.id, 'error');
+    const cb = document.getElementById('layer-cb-' + def.id);
+    if (cb) cb.checked = false;
+    console.error('Failed to load iMAP layer ' + def.id + ':', err);
+  }
+}
+
+function setLayerStatus(id, status) {
+  const row = document.querySelector('[data-layer-id="' + id + '"]')?.closest('.layer-row');
+  if (!row) return;
+  row.querySelectorAll('.layer-loading, .layer-error').forEach(el => el.remove());
+  if (status === 'loading') {
+    const s = document.createElement('span'); s.className = 'layer-loading'; s.textContent = '…'; row.appendChild(s);
+  } else if (status === 'error') {
+    const s = document.createElement('span'); s.className = 'layer-error';   s.textContent = '✕'; row.appendChild(s);
+  }
+}
+
 /* ── Track mouse for tooltip ──────────────────────────────────────────────── */
 document.addEventListener('mousemove', e => {
   if (tooltip.style.display === 'block') moveTooltip(e);
@@ -404,6 +544,7 @@ fetch(GEOJSON_PATH)
     }).addTo(map);
 
     updateSidebar();
+    map.invalidateSize();
     console.log(`Loaded ${data.features.length} tract features`);
   })
   .catch(err => {

@@ -610,6 +610,15 @@ document.getElementById('sidebar-toggle').addEventListener('click', () => {
    Form submission
    ═══════════════════════════════════════════════════════════════════════════ */
 
+document.getElementById('explainer-toggle').addEventListener('click', () => {
+  const body    = document.getElementById('explainer-body');
+  const btn     = document.getElementById('explainer-toggle');
+  const chevron = btn.querySelector('.explainer-chevron');
+  const open    = !body.hidden;
+  body.hidden   = open;
+  btn.setAttribute('aria-expanded', String(!open));
+  chevron.style.transform = open ? '' : 'rotate(180deg)';
+});
 
 document.getElementById('sidebar-submit-btn').addEventListener('click', () => {
   window.location.hash = '#submit';

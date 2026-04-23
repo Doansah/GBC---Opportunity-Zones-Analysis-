@@ -59,6 +59,15 @@ const SELECTED_STYLE = {
   fillOpacity: 0.40,
 };
 
+/* ── Top-20 Goldilocks pin icon ──────────────────────────────────────────── */
+const top20Icon = L.divIcon({
+  className: 'top20-pin',
+  html: '<div></div>',
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
+  popupAnchor: [0, -8],
+});
+
 /* ── Default base style ──────────────────────────────────────────────────── */
 const BASE_BORDER = { color: '#ffffff', weight: 0.8, opacity: 0.8 };
 
@@ -67,27 +76,35 @@ let currentMode    = 'score';          // 'score' | 'classification'
 let geojsonLayer   = null;
 let selectedTracts = new Map();        // geoid → { properties, layer }
 let layerByGeoid   = new Map();        // geoid → Leaflet layer
+let top20LayerGroup = null;
+let top20Enabled    = false;
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Color helpers
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/** Interpolate between #d73027 (red) → #fdae61 (orange) → #1a9641 (green)
- *  for composite_score in [0, 1]. Returns '#rrggbb'. */
+/* Actual observed score range (scored_tracts.csv: 359 tracts, min=0.159, max=0.684).
+   Normalizing to this range gives full red→green spread across real data. */
+const SCORE_MIN = 0.159;
+const SCORE_MAX = 0.684;
+
+/** Interpolate #dc2626 (red) → #fbbf24 (amber) → #16a34a (green)
+ *  Normalised to the actual observed score range so the best tract is green
+ *  and the worst is red, regardless of the absolute 0–1 scale. */
 function scoreToColor(score) {
   if (score == null || isNaN(score)) return '#cccccc';
-  const t = Math.max(0, Math.min(1, score));
+  const t = Math.max(0, Math.min(1, (score - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)));
   let r, g, b;
   if (t < 0.5) {
     const u = t / 0.5;
-    r = Math.round(215 + (253 - 215) * u);
-    g = Math.round( 48 + (174 -  48) * u);
-    b = Math.round( 39 + ( 97 -  39) * u);
+    r = Math.round(220 + (251 - 220) * u);
+    g = Math.round( 38 + (191 -  38) * u);
+    b = Math.round( 38 + ( 36 -  38) * u);
   } else {
     const u = (t - 0.5) / 0.5;
-    r = Math.round(253 + ( 26 - 253) * u);
-    g = Math.round(174 + (150 - 174) * u);
-    b = Math.round( 97 + ( 65 -  97) * u);
+    r = Math.round(251 + ( 22 - 251) * u);
+    g = Math.round(191 + (163 - 191) * u);
+    b = Math.round( 36 + ( 74 -  36) * u);
   }
   return `rgb(${r},${g},${b})`;
 }
@@ -123,112 +140,77 @@ function showTooltip(e, p) {
   const fmtNum = v => (v != null ? Number(v).toLocaleString() : 'N/A');
   const fmtDol = v => (v != null ? '$' + Number(v).toLocaleString() : 'N/A');
   const fmtSco = v => (v != null ? Number(v).toFixed(3) : 'N/A');
-  const fmtRat = v => (v != null ? Number(v).toFixed(2) : 'N/A');
-
   const badgeClass = {
     'Goldilocks':         'goldilocks',
     'Already Attractive': 'already-att',
     'Less Likely':        'less-likely',
   }[p.classification] || '';
 
-  // Score breakdown — only for tracts that were scored (not eliminated)
   const scored = p.composite_score != null;
-  const scoreBreakdown = scored ? `
-    <div class="tt-section">Score Breakdown</div>
+  // Score breakdown with data source tags
+  const scoreBreakdownWithSrc = scored ? `
+    <div class="tt-section">GBC Score Breakdown <span class="tt-src-head">GBC analysis</span></div>
     <div class="tt-row">
-      <span class="tt-label">Job density</span>
+      <span class="tt-label">Job density <span class="tt-src">LODES</span></span>
       <span class="tt-val">${fmtSco(p.job_density_score)} <span class="tt-wt">(30%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Vacancy rate</span>
+      <span class="tt-label">Vacancy rate <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.vacancy_rate_score)} <span class="tt-wt">(10%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Home value</span>
+      <span class="tt-label">Home value <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.home_value_inv_score)} <span class="tt-wt">(10%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Ownership rate</span>
+      <span class="tt-label">Ownership rate <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.ownership_inv_score)} <span class="tt-wt">(5%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Poverty</span>
+      <span class="tt-label">Poverty <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.poverty_score)} <span class="tt-wt">(18%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Income</span>
+      <span class="tt-label">Income <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.income_inv_score)} <span class="tt-wt">(12%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Unemployment</span>
+      <span class="tt-label">Unemployment <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.unemployment_score)} <span class="tt-wt">(8%)</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Education</span>
+      <span class="tt-label">Education <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtSco(p.education_inv_score)} <span class="tt-wt">(7%)</span></span>
     </div>
   ` : '';
 
-  // Stackability — supplementary context, not a score component
-  const stackNote = (p.stackability_count > 0)
-    ? `Inside ${p.stackability_count} incentive zone(s)`
-    : 'No overlapping incentive zones';
-
-  // Baltimore-only parcel/permit detail (null for non-Baltimore tracts)
-  const hasBaltDetail = p.land_to_value_ratio != null;
-  const baltDetail = hasBaltDetail ? `
-    <div class="tt-section">Local Detail (Baltimore)</div>
-    <div class="tt-row">
-      <span class="tt-label">Land/value ratio</span>
-      <span class="tt-val">${fmtRat(p.land_to_value_ratio)}</span>
-    </div>
-    <div class="tt-row">
-      <span class="tt-label">Vacancy proxy</span>
-      <span class="tt-val">${fmtPct(p.vacancy_proxy)}</span>
-    </div>
-    <div class="tt-row">
-      <span class="tt-label">Owner-occupancy</span>
-      <span class="tt-val">${fmtPct(p.owner_occupancy_rate)}</span>
-    </div>
-    <div class="tt-row">
-      <span class="tt-label">Commercial parcels</span>
-      <span class="tt-val">${fmtPct(p.pct_commercial)}</span>
-    </div>
-  ` : `
-    <div class="tt-section">Local Detail</div>
-    <div class="tt-row tt-muted">Parcel-level data not available for this county.</div>
-  `;
-
   tooltip.innerHTML = `
     <div class="tt-title">${p.geoid} &mdash; ${p.county}</div>
     <div class="tt-row">
-      <span class="tt-label">Class</span>
+      <span class="tt-label">Class <span class="tt-src">Urban Inst.</span></span>
       <span class="tt-val"><span class="t-badge ${badgeClass}">${p.classification}</span></span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Score</span>
+      <span class="tt-label">GBC Score <span class="tt-src">GBC</span></span>
       <span class="tt-val">${fmtSco(p.composite_score)}</span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Rank</span>
+      <span class="tt-label">GBC Rank <span class="tt-src">GBC</span></span>
       <span class="tt-val">${p.rank != null ? '#' + p.rank : 'N/A'}</span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Jobs (2022)</span>
+      <span class="tt-label">Jobs (2022) <span class="tt-src">LODES</span></span>
       <span class="tt-val">${fmtNum(p.jobs_2022)}</span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Poverty</span>
+      <span class="tt-label">Poverty rate <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtPct(p.povrate_2024)}</span>
     </div>
     <div class="tt-row">
-      <span class="tt-label">Med. Income</span>
+      <span class="tt-label">Med. Income <span class="tt-src">ACS</span></span>
       <span class="tt-val">${fmtDol(p.median_hhincome_2024)}</span>
     </div>
-    ${scoreBreakdown}
-    <div class="tt-section">Additional Context</div>
-    <div class="tt-row tt-muted">${stackNote}</div>
-    ${baltDetail}
+    ${scoreBreakdownWithSrc}
   `;
   tooltip.style.display = 'block';
   moveTooltip(e);
@@ -358,7 +340,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 /* ── Build legend ─────────────────────────────────────────────────────────── */
 const scoreLegendHTML = `
   <div class="map-legend" id="legend-score">
-    <strong>Composite Score</strong>
+    <strong>GBC Composite Score</strong>
     <div class="legend-gradient"></div>
     <div class="legend-gradient-labels"><span>Lower</span><span>Higher</span></div>
     <div class="legend-item" style="margin-top:0.5rem">
@@ -370,7 +352,7 @@ const scoreLegendHTML = `
 
 const classLegendHTML = `
   <div class="map-legend" id="legend-class">
-    <strong>Classification</strong>
+    <strong>Urban Institute Classification</strong>
     ${Object.entries(CLASS_COLORS).map(([label, color]) => `
       <div class="legend-item">
         <div class="legend-swatch" style="background:${color}"></div>
@@ -432,6 +414,22 @@ const LayerPanelControl = L.Control.extend({
     });
 
     const body = container.querySelector('#layer-panel-body');
+
+    // Top-20 Goldilocks toggle (built after GeoJSON loads)
+    const top20Row = document.createElement('label');
+    top20Row.className = 'layer-row layer-row-top20';
+    top20Row.innerHTML = `
+      <input type="checkbox" id="layer-cb-top20" />
+      <span class="layer-swatch" style="background:#16a34a33;border-color:#16a34a"></span>
+      <span class="layer-label">Top 20 Goldilocks</span>`;
+    body.appendChild(top20Row);
+    top20Row.querySelector('input').addEventListener('change', e => {
+      top20Enabled = e.target.checked;
+      if (top20LayerGroup) {
+        top20Enabled ? top20LayerGroup.addTo(map) : map.removeLayer(top20LayerGroup);
+      }
+    });
+
     IMAP_LAYERS.forEach(def => {
       const row = document.createElement('label');
       row.className = 'layer-row';
@@ -543,6 +541,20 @@ fetch(GEOJSON_PATH)
       },
     }).addTo(map);
 
+    // Build top-20 Goldilocks pin layer — rank is overall, so sort all
+    // Goldilocks tracts by rank and take the best 20 of that group.
+    const top20Markers = data.features
+      .filter(f => f.properties.classification === 'Goldilocks' && f.properties.rank != null)
+      .sort((a, b) => a.properties.rank - b.properties.rank)
+      .slice(0, 20)
+      .reduce((arr, f) => {
+        const lyr = layerByGeoid.get(f.properties.geoid);
+        if (lyr) arr.push(L.marker(lyr.getBounds().getCenter(), { icon: top20Icon }));
+        return arr;
+      }, []);
+    top20LayerGroup = L.layerGroup(top20Markers);
+    if (top20Enabled) top20LayerGroup.addTo(map);
+
     updateSidebar();
     map.invalidateSize();
     console.log(`Loaded ${data.features.length} tract features`);
@@ -566,7 +578,7 @@ document.getElementById('btn-score').addEventListener('click', () => {
   document.getElementById('btn-class').classList.remove('active');
   if (geojsonLayer) geojsonLayer.setStyle(styleFeature);
   // Re-apply selected highlight (setStyle overwrites everything)
-  selectedTracts.forEach(({ layer, properties: p }) => {
+  selectedTracts.forEach(({ layer }) => {
     layer.setStyle(SELECTED_STYLE);
   });
   updateLegend();
@@ -597,6 +609,11 @@ document.getElementById('sidebar-toggle').addEventListener('click', () => {
 /* ═══════════════════════════════════════════════════════════════════════════
    Form submission
    ═══════════════════════════════════════════════════════════════════════════ */
+
+
+document.getElementById('sidebar-submit-btn').addEventListener('click', () => {
+  window.location.hash = '#submit';
+});
 
 document.getElementById('submit-btn').addEventListener('click', async () => {
   const nameEl  = document.getElementById('field-name');
@@ -650,7 +667,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       msgEl.className   = 'form-message success';
       msgEl.textContent = `Thank you, ${payload.name}! Your selections (${payload.selection_count} tracts) have been submitted successfully.`;
       // Clear selections
-      selectedTracts.forEach(({ layer, properties: p }, id) => {
+      selectedTracts.forEach((_, id) => {
         const feature = layerByGeoid.get(id);
         if (feature && geojsonLayer) geojsonLayer.resetStyle(feature);
       });

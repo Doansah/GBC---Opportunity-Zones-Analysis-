@@ -506,12 +506,26 @@ section {
 .remove-btn:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
 
 .sidebar-footer {
-  padding: 0.75rem 0.875rem;
+  padding: 0.5rem 0.875rem;
   border-top: 1px solid var(--border);
-  font-size: 0.75rem;
-  color: var(--text-muted);
   flex-shrink: 0;
 }
+
+.sidebar-submit-btn {
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+.sidebar-submit-btn:hover { background: var(--navy-light); }
 
 /* Hover tooltip */
 #map-tooltip {
@@ -544,6 +558,39 @@ section {
 
 #map-tooltip .tt-label { color: rgba(255,255,255,0.6); }
 #map-tooltip .tt-val   { font-weight: 600; }
+
+/* Inline data-source tags in tooltip */
+#map-tooltip .tt-src {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.38);
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
+#map-tooltip .tt-src-head {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+  margin-left: 0.4rem;
+  opacity: 0.75;
+}
+#map-tooltip .tt-section {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-light);
+  margin: 0.5rem 0 0.2rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
 /* Map legend */
 .map-legend {
@@ -585,7 +632,7 @@ section {
   width: 100%;
   height: 12px;
   border-radius: 2px;
-  background: linear-gradient(to right, #d73027, #fdae61, #1a9641);
+  background: linear-gradient(to right, #dc2626, #fbbf24, #16a34a);
   margin-bottom: 0.2rem;
 }
 
@@ -876,3 +923,13 @@ footer .footer-bottom {
 .layer-label   { font-size: 0.74rem; color: var(--text); flex: 1; }
 .layer-loading { font-size: 0.7rem;  color: var(--text-muted); font-style: italic; }
 .layer-error   { font-size: 0.7rem;  color: #dc2626; }
+
+/* ── Top-20 Goldilocks pin marker ─────────────────────────────────────────── */
+.top20-pin div {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #16a34a;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+}

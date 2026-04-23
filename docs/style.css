@@ -787,6 +787,20 @@ footer .footer-inner {
   display: flex;
   gap: 3rem;
   flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+footer .footer-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+footer .footer-logo img {
+  height: 48px;
+  width: auto;
+  opacity: 0.85;
+  filter: brightness(0) invert(1);
 }
 
 footer h4 {

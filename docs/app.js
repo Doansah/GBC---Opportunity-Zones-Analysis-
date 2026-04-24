@@ -185,7 +185,8 @@ function showTooltip(e, p) {
   ` : '';
 
   tooltip.innerHTML = `
-    <div class="tt-title">${p.geoid} &mdash; ${p.county}</div>
+    <div class="tt-title">${p.geoid} &mdash; ${p.neighborhood || p.county}</div>
+    ${p.neighborhood ? `<div class="tt-subtitle">${p.county}</div>` : ''}
     <div class="tt-row">
       <span class="tt-label">Class <span class="tt-src">Urban Inst.</span></span>
       <span class="tt-val"><span class="t-badge ${badgeClass}">${p.classification}</span></span>
@@ -609,16 +610,6 @@ document.getElementById('sidebar-toggle').addEventListener('click', () => {
 /* ═══════════════════════════════════════════════════════════════════════════
    Form submission
    ═══════════════════════════════════════════════════════════════════════════ */
-
-document.getElementById('explainer-toggle').addEventListener('click', () => {
-  const body    = document.getElementById('explainer-body');
-  const btn     = document.getElementById('explainer-toggle');
-  const chevron = btn.querySelector('.explainer-chevron');
-  const open    = !body.hidden;
-  body.hidden   = open;
-  btn.setAttribute('aria-expanded', String(!open));
-  chevron.style.transform = open ? '' : 'rotate(180deg)';
-});
 
 document.getElementById('sidebar-submit-btn').addEventListener('click', () => {
   window.location.hash = '#submit';

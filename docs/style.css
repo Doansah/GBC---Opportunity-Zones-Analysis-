@@ -546,8 +546,14 @@ section {
 #map-tooltip .tt-title {
   font-weight: 700;
   font-size: 0.85rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.1rem;
   color: var(--gold-light);
+}
+
+#map-tooltip .tt-subtitle {
+  font-size: 0.72rem;
+  color: #aaa;
+  margin-bottom: 0.3rem;
 }
 
 #map-tooltip .tt-row {

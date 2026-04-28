@@ -292,7 +292,7 @@
     <h2>Submit Your Selections</h2>
 
     <div class="submit-layout">
-      <!-- Left: description -->
+      <!-- Description -->
       <div class="submit-description">
         <p>
 
@@ -316,8 +316,8 @@ While we have provided guiding information, <b>the highest priority tracts are t
         </div>
       </div>
 
-      <!-- Right: form -->
-      <div>
+      <!-- Form -->
+      <div class="submit-form">
         <div class="form-group">
           <label for="field-name">Your Name <span style="color:#dc2626">*</span></label>
           <input type="text" id="field-name" name="name"  autocomplete="name" />
@@ -327,7 +327,19 @@ While we have provided guiding information, <b>the highest priority tracts are t
           <input type="text" id="field-org" name="organization"  autocomplete="organization" />
         </div>
         <div class="form-group">
-          <label for="field-comments">Comments <span class="optional">(optional)</span></label>
+          <label for="field-q1">How is your fund management or development strategy evolving in response to recent legislative and regulatory adjustments to the Opportunity Zone program? Have these changes shifted your focus toward business investments, real estate developments, or a hybrid of both? <span style="color:#dc2626">*</span></label>
+          <textarea id="field-q1" name="q1_strategy_evolution"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="field-q2">Beyond the currently identified "key neighborhoods" or strategic zones, are there specific areas within Baltimore that you view as untapped opportunities for high-impact growth? <span style="color:#dc2626">*</span></label>
+          <textarea id="field-q2" name="q2_untapped_areas"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="field-q3">What specific resources or collateral—such as market data, impact reports, or regional prospectuses—could this committee produce to better support your investment decisions and enhance the effectiveness of local Opportunity Zones? <span style="color:#dc2626">*</span></label>
+          <textarea id="field-q3" name="q3_resources_needed"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="field-comments">Additional Comments <span class="optional">(optional)</span></label>
           <textarea id="field-comments" name="comments"></textarea>
         </div>
         <button class="submit-btn" id="submit-btn">Submit Selections</button>

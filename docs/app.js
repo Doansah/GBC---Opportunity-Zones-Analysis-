@@ -618,6 +618,9 @@ document.getElementById('sidebar-submit-btn').addEventListener('click', () => {
 document.getElementById('submit-btn').addEventListener('click', async () => {
   const nameEl  = document.getElementById('field-name');
   const orgEl   = document.getElementById('field-org');
+  const q1El    = document.getElementById('field-q1');
+  const q2El    = document.getElementById('field-q2');
+  const q3El    = document.getElementById('field-q3');
   const commEl  = document.getElementById('field-comments');
   const msgEl   = document.getElementById('form-message');
   const btn     = document.getElementById('submit-btn');
@@ -632,6 +635,27 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
     return;
   }
 
+  if (!q1El.value.trim()) {
+    msgEl.className = 'form-message error';
+    msgEl.textContent = 'Please answer the question about your fund management or development strategy.';
+    q1El.focus();
+    return;
+  }
+
+  if (!q2El.value.trim()) {
+    msgEl.className = 'form-message error';
+    msgEl.textContent = 'Please answer the question about untapped areas within Baltimore.';
+    q2El.focus();
+    return;
+  }
+
+  if (!q3El.value.trim()) {
+    msgEl.className = 'form-message error';
+    msgEl.textContent = 'Please answer the question about resources this committee could produce.';
+    q3El.focus();
+    return;
+  }
+
   if (selectedTracts.size === 0) {
     msgEl.className = 'form-message error';
     msgEl.textContent = 'Please select at least one tract on the map before submitting.';
@@ -639,9 +663,12 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
   }
 
   const payload = {
-    name:         nameEl.value.trim(),
-    organization: orgEl.value.trim(),
-    comments:     commEl.value.trim(),
+    name:                  nameEl.value.trim(),
+    organization:          orgEl.value.trim(),
+    q1_strategy_evolution: q1El.value.trim(),
+    q2_untapped_areas:     q2El.value.trim(),
+    q3_resources_needed:   q3El.value.trim(),
+    comments:              commEl.value.trim(),
     selections:   [...selectedTracts.values()].map(({ properties: p }) => ({
       geoid:           p.geoid,
       county:          p.county,
@@ -677,6 +704,9 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       // Clear form
       nameEl.value = '';
       orgEl.value  = '';
+      q1El.value   = '';
+      q2El.value   = '';
+      q3El.value   = '';
       commEl.value = '';
     } else {
       const body = await resp.json().catch(() => ({}));

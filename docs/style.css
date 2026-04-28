@@ -655,11 +655,11 @@ section {
 }
 
 .submit-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   margin-top: 2rem;
+  max-width: 720px;
 }
 
 .submit-description p {
@@ -837,7 +837,6 @@ footer .footer-bottom {
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .methodology-grid { grid-template-columns: 1fr; }
-  .submit-layout    { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {

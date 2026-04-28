@@ -289,62 +289,88 @@
 <!-- ── Submit ─────────────────────────────────────────────────────────────── -->
 <section id="submit-section">
   <div class="container">
-    <h2>Submit Your Selections</h2>
-
     <div class="submit-layout">
-      <!-- Description -->
-      <div class="submit-description">
-        <p>
 
-While we have provided guiding information, <b>the highest priority tracts are those where you plan to complete a deal within the next 10 years.</b> Please select the tracts where you are currently planning a project, as well as any other tracts you believe have the highest potential for future dealmaking.
-
-
+      <!-- Intro -->
+      <div class="submit-intro">
+        <h2>Submit Your Selections</h2>
+        <p class="submit-lead">
+          While we have provided guiding information, <strong>the highest priority tracts are those where you plan to complete a deal within the next 10 years.</strong> Please select the tracts where you are currently planning a project, as well as any other tracts you believe have the highest potential for future dealmaking.
         </p>
-        <p>
-          Submissions are collected by the Greater Baltimore Committee and will
-          inform recommendations to state government. All inputs are reviewed
-          alongside the quantitative scoring.
+        <p class="submit-sub">
+          Submissions are collected by the Greater Baltimore Committee and will inform recommendations to state government. All inputs are reviewed alongside the quantitative scoring.
         </p>
+      </div>
 
-        <div class="selection-summary">
-          <strong>Your current selection</strong>
-          <div><span id="submit-count" style="font-size:1.5rem;font-weight:800;color:var(--navy);">0</span>
-          <span style="font-size:0.88rem;color:var(--text-muted);"> tracts selected</span></div>
-          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.25rem;">
-            Use the map above to add or remove tracts.
-          </div>
+      <!-- Selection pill -->
+      <div class="selection-summary">
+        <strong>Your current selection</strong>
+        <div class="selection-count-wrap">
+          <span id="submit-count">0</span>
+          <span class="selection-label"> tracts selected</span>
         </div>
       </div>
 
-      <!-- Form -->
-      <div class="submit-form">
-        <div class="form-group">
-          <label for="field-name">Your Name <span style="color:#dc2626">*</span></label>
-          <input type="text" id="field-name" name="name"  autocomplete="name" />
+      <!-- Form card -->
+      <div class="submit-card">
+
+        <!-- Contact row -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="field-name">Your Name <span class="req">*</span></label>
+            <input type="text" id="field-name" name="name" autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="field-org">Organization <span class="req">*</span></label>
+            <input type="text" id="field-org" name="organization" autocomplete="organization" />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="field-org">Organization <span class="optional">(optional)</span></label>
-          <input type="text" id="field-org" name="organization"  autocomplete="organization" />
+
+        <!-- Divider -->
+        <div class="form-section-divider">
+          <span>Survey Questions</span>
         </div>
-        <div class="form-group">
-          <label for="field-q1">How is your fund management or development strategy evolving in response to recent legislative and regulatory adjustments to the Opportunity Zone program? Have these changes shifted your focus toward business investments, real estate developments, or a hybrid of both? <span style="color:#dc2626">*</span></label>
+
+        <!-- Q1 -->
+        <div class="form-group form-question">
+          <label for="field-q1">
+            <span class="q-num">1</span>
+            How is your fund management or development strategy evolving in response to recent legislative and regulatory adjustments to the Opportunity Zone program? Have these changes shifted your focus toward business investments, real estate developments, or a hybrid of both?
+            <span class="req">*</span>
+          </label>
           <textarea id="field-q1" name="q1_strategy_evolution"></textarea>
         </div>
-        <div class="form-group">
-          <label for="field-q2">Beyond the currently identified "key neighborhoods" or strategic zones, are there specific areas within Baltimore that you view as untapped opportunities for high-impact growth? <span style="color:#dc2626">*</span></label>
+
+        <!-- Q2 -->
+        <div class="form-group form-question">
+          <label for="field-q2">
+            <span class="q-num">2</span>
+            Beyond the currently identified "key neighborhoods" or strategic zones, are there specific areas within Baltimore that you view as untapped opportunities for high-impact growth?
+            <span class="req">*</span>
+          </label>
           <textarea id="field-q2" name="q2_untapped_areas"></textarea>
         </div>
-        <div class="form-group">
-          <label for="field-q3">What specific resources or collateral—such as market data, impact reports, or regional prospectuses—could this committee produce to better support your investment decisions and enhance the effectiveness of local Opportunity Zones? <span style="color:#dc2626">*</span></label>
+
+        <!-- Q3 -->
+        <div class="form-group form-question">
+          <label for="field-q3">
+            <span class="q-num">3</span>
+            What specific resources or collateral—such as market data, impact reports, or regional prospectuses—could this committee produce to better support your investment decisions and enhance the effectiveness of local Opportunity Zones?
+            <span class="req">*</span>
+          </label>
           <textarea id="field-q3" name="q3_resources_needed"></textarea>
         </div>
+
+        <!-- Additional comments -->
         <div class="form-group">
           <label for="field-comments">Additional Comments <span class="optional">(optional)</span></label>
           <textarea id="field-comments" name="comments"></textarea>
         </div>
+
         <button class="submit-btn" id="submit-btn">Submit Selections</button>
         <div class="form-message" id="form-message"></div>
       </div>
+
     </div>
   </div>
 </section>

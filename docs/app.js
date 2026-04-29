@@ -39,7 +39,7 @@ window.addEventListener('hashchange', routeFromHash);
 document.addEventListener('DOMContentLoaded', routeFromHash);
 
 /* ── Configuration ─────────────────────────────────────────────────────────── */
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xnjlgevo';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xykogzaw';
 const GEOJSON_PATH       = 'data/scored_tracts.geojson';
 const MAP_CENTER         = [38.95, -76.75];
 const MAP_ZOOM           = 8;
